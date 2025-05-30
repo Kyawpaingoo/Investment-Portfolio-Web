@@ -1,7 +1,6 @@
 import React, {createContext, useContext, useState, useEffect} from "react";
 import axios from "axios";
 import { LoginMessage, ReturnMessage } from "../dto/datalist";
-import { useNavigate } from "react-router-dom";
 
 interface User {
     Username: string;
@@ -26,7 +25,6 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-
 export const AuthProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
     const [user, setUser] = useState<User | null>(null);
 
@@ -39,7 +37,7 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({children}) 
 
     const login = async (email: string, password: string) => {
         try {
-            const {data} = await axios.post("/account/login", {email, password});
+            const {data} : {data: User} = await axios.post("/account/login", {email, password});
             
             if(data.ReturnMessage === LoginMessage.SuccessLogin) {
                 const userData: User = data
@@ -56,7 +54,7 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({children}) 
     }
 
     const register = async (username: string, email: string, password: string) => {
-        const {data} = await axios.post("/account/register", {username, email, password});
+        const {data} : {data: string} = await axios.post("/account/register", {username, email, password});
 
         if(data !== ReturnMessage.Success) {
             throw new Error(data || "Registration failed");

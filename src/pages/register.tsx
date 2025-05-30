@@ -10,13 +10,15 @@ const RegisterPage: React.FC = () => {
     const { register } = useAuth();
     const navigate = useNavigate();
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
             await register(username, email, password);
             navigate("/login");
         } catch (error) {
-            alert("Registration failed");
+            if(error instanceof Error) {
+                alert(error.message);
+            }
         }
     }
 
